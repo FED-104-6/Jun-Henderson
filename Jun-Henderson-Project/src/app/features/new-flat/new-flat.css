@@ -1,0 +1,167 @@
+:root{
+  --ink:#1e1e2f;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --ring:#a78bfa;
+  --ring-strong:#7c3aed;
+  --danger:#ef4444;
+
+  /* aparência */
+  --card-bg:#ffffff;
+  --input-bg:#f3e8ff; /* lilás MUITO suave nos inputs */
+}
+
+/* ===================== CARD ===================== */
+form.new-flat-form{
+  max-width: 680px !important;
+  margin: 36px auto !important;             /* sobe o card */
+  padding: 24px 28px !important;
+  background: var(--card-bg) !important;
+  border-radius: 18px !important;
+  border: 1px solid #d6c4f8 !important;
+
+  /* “flutuação” com camadas */
+  box-shadow:
+    0 35px 65px rgba(95, 45, 182, 0.12),
+    0 25px 35px rgba(17,24,39,0.08),
+    0 5px 6px rgba(17,24,39,0.05) !important;
+
+  color: var(--ink);
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+/* ===================== GRID ===================== */
+form.new-flat-form > .form-grid{
+  display:grid !important;
+  grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+  column-gap: 36px !important;    /* separa horizontal */
+  row-gap: 28px !important;       /* separa vertical */
+  align-items:start !important;
+}
+
+/* labels padrão */
+form.new-flat-form > .form-grid > label{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  font-weight:600 !important;
+}
+
+form.new-flat-form > .form-grid > label > span{
+  font-size:.95rem !important;
+}
+
+/* ===================== INPUTS ===================== */
+form.new-flat-form input[type="text"],
+form.new-flat-form input[type="number"],
+form.new-flat-form input[type="date"]{
+  width:100% !important;
+  height:44px !important;
+  padding:10px 12px !important;
+  border-radius:12px !important;
+  border:1.5px solid var(--line) !important;
+  background: var(--input-bg) !important;      /* cor suave visível */
+  color: var(--ink) !important;
+  outline:none !important;
+  transition: border-color .18s, box-shadow .18s, background .18s !important;
+}
+
+form.new-flat-form input:hover{
+  border-color: var(--ring) !important;
+  box-shadow: 0 0 0 2px rgba(167,139,250,.22) !important;
+}
+
+form.new-flat-form input:focus{
+  border-color: var(--ring-strong) !important;
+  background:#fff !important;                 /* foco = branco pra contraste */
+  box-shadow: 0 0 0 3px rgba(124,58,237,.32) !important;
+}
+
+form.new-flat-form ::placeholder{ color:#9ca3af !important; }
+
+/* ===================== CHECKBOX (Has AC) ===================== */
+form.new-flat-form > .form-grid > label.field-checkbox{
+  display:inline-flex !important;             /* lado a lado */
+  flex-direction:row !important;
+  align-items:center !important;
+  gap:10px !important;
+  grid-column: 1 / 2 !important;              /* fica na coluna da ESQUERDA */
+  margin-top: 6px !important;
+}
+
+form.new-flat-form > .form-grid > label.field-checkbox input[type="checkbox"]{
+  width:18px !important; height:18px !important;
+  accent-color: var(--ring-strong) !important;
+  cursor:pointer !important;
+}
+
+/* ===================== HELP / ERRO ===================== */
+form.new-flat-form em{
+  font-style:italic !important;
+  font-size:.86rem !important;
+  color:var(--muted) !important;
+  min-height:1rem !important;
+}
+form.new-flat-form em.error{ color:var(--danger) !important; }
+
+/* ===================== AÇÕES (botões) ===================== */
+form.new-flat-form > .actions{
+  display:flex !important;
+  justify-content:flex-end !important;
+  gap:12px !important;
+  margin-top: 14px !important;
+}
+
+form.new-flat-form a.btn,
+form.new-flat-form .btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:110px !important;
+  height:42px !important;
+  padding:0 16px !important;
+  border-radius:999px !important;
+  border:1px solid transparent !important;
+  font-weight:700 !important;
+  text-decoration:none !important;            /* tira sublinhado do <a> */
+  cursor:pointer !important;
+  transition: background .2s, border-color .2s, box-shadow .2s, transform .06s, opacity .2s !important;
+}
+
+/* Cancel */
+form.new-flat-form a.btn.ghost{
+  background:#fff !important;
+  color:var(--ink) !important;
+  border:1px solid var(--line) !important;
+}
+form.new-flat-form a.btn.ghost:hover{
+  border-color: var(--ring) !important;
+  box-shadow: 0 0 0 2px rgba(167,139,250,.22) !important;
+}
+
+/* SAVE BUTTON */
+/* ===== SAVE: estados por classe (vence CSS global) ===== */
+
+/* estado padrão (ou desabilitado): cinza */
+form.new-flat-form .btn.save,
+form.new-flat-form .btn.save.is-disabled {
+  background: #cbd5e1 !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #fff !important;
+}
+
+/* habilitado: roxo forte */
+form.new-flat-form .btn.save.is-enabled {
+  background: #7c3aed !important;
+  border: 1px solid #7c3aed !important;
+  color: #fff !important;
+}
+
+/* hover apenas quando habilitado */
+form.new-flat-form .btn.save.is-enabled:hover {
+  background: #5b21b6 !important;
+  box-shadow: 0 4px 10px rgba(124,58,237,.3) !important;
+  transform: translateY(-1px);
+}
+
+
