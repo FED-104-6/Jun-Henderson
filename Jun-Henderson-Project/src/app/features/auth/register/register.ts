@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { Auth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from '@angular/fire/auth';
+import { RouterLink } from '@angular/router';
 
 function match(otherControlName: string) {
   return (control: AbstractControl) => {
@@ -14,7 +15,7 @@ function match(otherControlName: string) {
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
 })
@@ -56,7 +57,7 @@ export class RegisterComponent {
 
     try {
       if (!email || !password) return;
-      const cred = await createUserWithEmailAndPassword(this.auth, email.trim(), password);
+      const cred = await createUserWithEmailAndPassword(this.auth, String(email).trim(), String(password));
       if (displayName) await updateProfile(cred.user, { displayName: String(displayName).trim() });
       try { await sendEmailVerification(cred.user); } catch {}
       this.success.set('Account created! Please check your email to verify.');
@@ -66,7 +67,6 @@ export class RegisterComponent {
       const message = e?.message ?? '';
       const mapped = this.errorMap[code];
       this.fireError.set(mapped ? mapped : `${code} ${message}`.trim());
-      console.error('Firebase register error:', e);
     } finally {
       this.loading.set(false);
     }

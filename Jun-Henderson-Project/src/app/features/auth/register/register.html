@@ -38,7 +38,8 @@
     </button>
 
     <p class="redirect">
-      Already have an account? <a routerLink="/login">Login</a>
+      Already have an account?
+      <a [routerLink]="['/login']" class="router-link">Login</a>
     </p>
 
     <p class="error" *ngIf="fireError()">{{ fireError() }}</p>
