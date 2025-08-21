@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewFlatComponent } from './new-flat';
+import { ViewFlat } from './view-flat';
 
-describe('NewFlat', () => {
-  let component: NewFlatComponent;
-  let fixture: ComponentFixture<NewFlatComponent>;
+describe('ViewFlat', () => {
+  let component: ViewFlat;
+  let fixture: ComponentFixture<ViewFlat>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewFlatComponent]
+      imports: [ViewFlat]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NewFlatComponent);
+    fixture = TestBed.createComponent(ViewFlat);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

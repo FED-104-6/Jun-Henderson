@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, Validators, NonNullableFormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NewFlatService } from './new-flat-service';
+import { NewFlatService } from './new-flat.service';
 import { Flat } from './new-flat.model';
 
 @Component({

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { NewFlatService } from './new-flat-service';
+import { NewFlatService } from './new-flat.service';
 
 describe('NewFlatService', () => {
   let service: NewFlatService;
