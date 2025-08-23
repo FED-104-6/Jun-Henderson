@@ -1,1 +1,79 @@
-<p>edit-flat works!</p>
+<div class="ef-wrap" *ngIf="store.get(id) as original; else notFound">
+  <header class="ef-head">
+    <a [routerLink]="['/flat', id]" class="link">← Back to View</a>
+    <h1>Edit Flat</h1>
+  </header>
+
+  <form class="ef-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="grid">
+      <label>
+        <span>City</span>
+        <input type="text" formControlName="city" required />
+        <em *ngIf="f.city.touched && f.city.invalid">Required (min 2 chars)</em>
+      </label>
+
+      <label>
+        <span>Street Name</span>
+        <input type="text" formControlName="streetName" required />
+        <em *ngIf="f.streetName.touched && f.streetName.invalid">Required (min 2 chars)</em>
+      </label>
+
+      <label>
+        <span>Street Number</span>
+        <input type="number" formControlName="streetNumber" min="1" step="1" required />
+        <em *ngIf="f.streetNumber.touched && f.streetNumber.invalid">Positive number</em>
+      </label>
+
+      <label>
+        <span>Area Size (m²)</span>
+        <input type="number" formControlName="areaSize" min="1" step="1" required />
+        <em *ngIf="f.areaSize.touched && f.areaSize.invalid">Positive number</em>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" formControlName="hasAC" />
+        <span>Has AC</span>
+      </label>
+
+      <label>
+        <span>Year Built</span>
+        <input type="number" formControlName="yearBuilt" min="1800" [max]="currentYear" step="1" required />
+        <em *ngIf="f.yearBuilt.touched && f.yearBuilt.invalid">Between 1800 and {{currentYear}}</em>
+      </label>
+
+      <label>
+        <span>Rent Price (CAD)</span>
+        <input type="number" formControlName="rentPrice" min="1" step="1" required />
+        <em *ngIf="f.rentPrice.touched && f.rentPrice.invalid">Positive number</em>
+      </label>
+
+      <label>
+        <span>Date Available</span>
+        <input type="date" formControlName="dateAvailable" required />
+        <em *ngIf="f.dateAvailable.touched && f.dateAvailable.invalid">Required</em>
+      </label>
+    </div>
+
+    <div class="actions">
+      <a routerLink="/home" class="btn ghost">Cancel</a>
+      <button
+      type="submit"
+      class="btn save"
+      [disabled]="form.invalid"
+      [class.is-enabled]="form.valid"
+      [class.is-disabled]="!form.valid"> Save changes
+</button>
+
+    </div>
+  </form>
+</div>
+
+<ng-template #notFound>
+  <div class="ef-empty">
+    <p>Flat not found.</p>
+    <div class="actions">
+      <a routerLink="/home" class="btn ghost">Home</a>
+      <a [routerLink]="['/flat', id]" class="btn">View</a>
+    </div>
+  </div>
+</ng-template>

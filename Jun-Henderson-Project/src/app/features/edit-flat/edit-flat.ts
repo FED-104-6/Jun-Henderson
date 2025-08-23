@@ -1,40 +1,88 @@
-import { Injectable } from '@angular/core';
-import { Flat } from './flat.model'; 
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ReactiveFormsModule, Validators, NonNullableFormBuilder } from '@angular/forms';
 
-// Local storage key (shared with New Flat)
-const STORAGE_KEY = 'flats';
+import { EditFlatService } from './edit-flat.service';
+import { Flat } from './edit-flat.model';
 
-@Injectable({ providedIn: 'root' })
-export class ViewFlatService {
-  list(): Flat[] {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : [];
-    } catch {
-      return [];
+@Component({
+  standalone: true,
+  selector: 'app-edit-flat',
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  templateUrl: './edit-flat.html',
+  styleUrls: ['./edit-flat.css'],
+})
+export class EditFlatComponent {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private fb = inject(NonNullableFormBuilder);
+
+  readonly store: EditFlatService = inject(EditFlatService);
+  readonly id = this.route.snapshot.paramMap.get('id') ?? '';
+  readonly currentYear = new Date().getFullYear();
+  readonly today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+
+  // NOTE: Mirror New Flat validations (all required, correct types).
+  form = this.fb.group({
+    city: ['', [Validators.required, Validators.minLength(2)]],
+    streetName: ['', [Validators.required, Validators.minLength(2)]],
+    streetNumber: [1, [Validators.required, Validators.min(1)]],
+    areaSize: [1, [Validators.required, Validators.min(1)]],
+    hasAC: [false, [Validators.required]],
+    yearBuilt: [this.currentYear, [Validators.required, Validators.min(1800), Validators.max(this.currentYear)]],
+    rentPrice: [1, [Validators.required, Validators.min(1)]],
+    dateAvailable: [this.today, [Validators.required]],
+  });
+
+  get f() { return this.form.controls; }
+
+  ngOnInit(): void {
+    // Load the existing flat and prefill the form.
+    // If not found, the template will show a "not found" state.
+    const existing = this.store.get(this.id);
+    if (existing) {
+      // Safe prefill 
+      this.form.setValue({
+        city: existing.city ?? '',
+        streetName: existing.streetName ?? '',
+        streetNumber: Number(existing.streetNumber ?? 1),
+        areaSize: Number(existing.areaSize ?? 1),
+        hasAC: Boolean(existing.hasAC ?? false),
+        yearBuilt: Number(existing.yearBuilt ?? this.currentYear),
+        rentPrice: Number(existing.rentPrice ?? 1),
+        dateAvailable: String(existing.dateAvailable ?? this.today),
+      });
     }
   }
 
-  get(id: string): Flat | null {
-    return this.list().find(f => f.id === id) ?? null;
-  }
-
-  // --- added: update support for Edit Flat ---
-  // NOTE: This updates the item in localStorage and returns the updated record.
-  update(id: string, patch: Partial<Flat>): Flat | null {
-    try {
-      const all = this.list();
-      const idx = all.findIndex(f => f.id === id);
-      if (idx === -1) return null;
-
-      const updated: Flat = { ...all[idx], ...patch };
-      all[idx] = updated;
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
-      return updated;
-    } catch {
-      return null;
+  submit(): void {
+    // Guard invalid forms
+    if (this.form.invalid) {
+      this.form.markAllAsTouched(); // show validation errors
+      return;
     }
+
+    // Prepare patch with the exact form shape.
+    const patch: Partial<Flat> = {
+      city: this.f.city.value!,
+      streetName: this.f.streetName.value!,
+      streetNumber: Number(this.f.streetNumber.value),
+      areaSize: Number(this.f.areaSize.value),
+      hasAC: !!this.f.hasAC.value,
+      yearBuilt: Number(this.f.yearBuilt.value),
+      rentPrice: Number(this.f.rentPrice.value),
+      dateAvailable: this.f.dateAvailable.value!,
+    };
+
+    const updated = this.store.update(this.id, patch);
+    if (!updated) {
+      console.error('[EditFlatComponent] Update failed or flat not found.');
+      return;
+    }
+
+    // Per instructions: redirect to Home after save.
+    // Home will be created later; point to '/home'.
+    this.router.navigateByUrl('/home');
   }
 }
