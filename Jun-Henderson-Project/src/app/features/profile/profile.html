@@ -1,0 +1,54 @@
+<div class="profile-card" *ngIf="user(); else noUser">
+  <h1>Your profile</h1>
+
+  <div class="avatar" *ngIf="photo(); else placeholder">
+    <img [src]="photo()" alt="avatar" />
+  </div>
+  <ng-template #placeholder>
+    <div class="avatar placeholder">?</div>
+  </ng-template>
+
+  <div class="info">
+    <p><strong>Email:</strong> {{ email() }}</p>
+    <p>
+      <strong>Status:</strong>
+      <span [class.verified]="emailVerified()" [class.unverified]="!emailVerified()">
+        {{ emailVerified() ? 'Email verified' : 'Email not verified' }}
+      </span>
+      <button type="button" class="linklike" *ngIf="!emailVerified()" (click)="sendVerify()">Send verification</button>
+    </p>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+    <div class="field">
+      <label for="displayName">Display name</label>
+      <input id="displayName" type="text" formControlName="displayName" placeholder="Your name" />
+      <small *ngIf="f.displayName.touched && f.displayName.invalid">Min 2 characters.</small>
+    </div>
+
+    <div class="field">
+      <label for="photoURL">Photo URL</label>
+      <input id="photoURL" type="url" formControlName="photoURL" placeholder="https://..." />
+    </div>
+
+    <button type="submit" [disabled]="form.invalid || loading()">
+      {{ loading() ? 'Saving...' : 'Save changes' }}
+    </button>
+  </form>
+
+  <div class="actions">
+    <a routerLink="/register">Create account</a>
+    <a routerLink="/login">Login</a>
+    <button type="button" class="danger" (click)="logout()">Sign out</button>
+  </div>
+
+  <p class="error" *ngIf="fireError()">{{ fireError() }}</p>
+  <p class="success" *ngIf="success()">{{ success() }}</p>
+</div>
+
+<ng-template #noUser>
+  <div class="profile-card">
+    <h1>Not authenticated</h1>
+    <p>Please <a routerLink="/login">login</a> or <a routerLink="/register">create an account</a>.</p>
+  </div>
+</ng-template>
