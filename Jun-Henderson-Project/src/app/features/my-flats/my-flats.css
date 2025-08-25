@@ -1,0 +1,122 @@
+:root{
+  --ink:#1e1e2f;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --ring:#a78bfa;
+  --ring-strong:#7c3aed;
+
+  --card-bg:#ffffff;
+}
+
+.mf-wrap{
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 0 16px;
+  color: var(--ink);
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+.mf-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom: 16px;
+}
+.muted{ color: var(--muted); }
+
+.mf-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 16px;
+}
+
+.card{
+  background: var(--card-bg);
+  border: 1px solid #d6c4f8;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow:
+    0 20px 40px rgba(95,45,182,.10),
+    0 10px 20px rgba(17,24,39,.06),
+    0 3px 6px rgba(17,24,39,.04);
+}
+
+.card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom: 10px;
+}
+.card-title{ font-size: 1.05rem; font-weight: 800; }
+.price{ font-weight: 800; }
+
+.specs{
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 6px 12px;
+}
+.specs li strong { color: #374151; }
+
+.card-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap: 8px;
+}
+
+.btn, a.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:38px;
+  padding:0 14px;
+  border-radius:999px;
+  border:1px solid transparent;
+  font-weight:700;
+  text-decoration:none;
+  cursor:pointer;
+  transition: background .2s, border-color .2s, box-shadow .2s, transform .06s;
+}
+
+.btn.primary{
+  background: #7c3aed;
+  border: 1px solid #7c3aed;
+  color:#fff;
+}
+.btn.primary:hover{
+  background:#5b21b6;
+  box-shadow: 0 4px 10px rgba(124,58,237,.3);
+  transform: translateY(-1px);
+}
+
+.btn.ghost{
+  background:#fff;
+  color:var(--ink);
+  border:1px solid var(--line);
+}
+.btn.ghost:hover{
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px rgba(167,139,250,.22);
+}
+
+.btn.danger{
+  background:#fff;
+  color:#b91c1c;
+  border:1px solid #fecaca;
+}
+.btn.danger:hover{
+  background:#fee2e2;
+  border-color:#ef4444;
+}
+
+.mf-empty{
+  text-align:center;
+  color:#374151;
+  padding: 40px 16px;
+}
+
+@media (max-width: 860px){
+  .mf-grid{ grid-template-columns: 1fr; }
+}

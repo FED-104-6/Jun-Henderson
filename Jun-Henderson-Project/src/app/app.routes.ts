@@ -8,18 +8,23 @@ import { authGuard } from './features/guards/auth.guard';
 import { NewFlatComponent } from './features/new-flat/new-flat';
 import { ViewFlatComponent } from './features/view-flat/view-flat';
 import { EditFlatComponent } from './features/edit-flat/edit-flat';
-import { canActivate } from '@angular/fire/auth-guard';
+import { MyFlatsComponent } from './features/my-flats/my-flats';
 
 export const routes: Routes = [
+  // public
   { path: '', component: RegisterComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
+
+  // flats
+  { path: 'flat/:id', component: ViewFlatComponent },                                  // PUBLIC
+  { path: 'new-flat', component: NewFlatComponent, canActivate: [authGuard] },         // PROTECTED
+  { path: 'flat/:id/edit', component: EditFlatComponent, canActivate: [authGuard] },   // PROTECTED
+  { path: 'my-flats', component: MyFlatsComponent, canActivate: [authGuard] },         // PROTECTED
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
 
-  // View + edit (singular Flat)
-  { path: 'new-flat', component: NewFlatComponent, canActivate: [authGuard] },
-  { path: 'flat/:id', component: ViewFlatComponent },
-  { path: 'flat/:id/edit', component: EditFlatComponent, canActivate: [authGuard] },
+  // temporary until real Home exists
+  { path: 'home', redirectTo: '', pathMatch: 'full' },
 
   { path: '**', redirectTo: '' },
 ];

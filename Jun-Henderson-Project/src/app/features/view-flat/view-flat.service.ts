@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Flat } from './view-flat.model';
 
-// Read-only service for View Flat. It reads from localStorage.
-// Must live in: src/app/features/view-flat/view-flat-service.ts
 const STORAGE_KEY = 'flats';
 
 @Injectable({ providedIn: 'root' })
 export class ViewFlatService {
-
   list(): Flat[] {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
