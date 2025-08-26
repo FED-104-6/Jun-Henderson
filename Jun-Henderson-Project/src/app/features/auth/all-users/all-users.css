@@ -1,0 +1,84 @@
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+.users-page {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filters input,
+.filters select {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.table-wrap {
+  overflow: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+.users {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users thead th {
+  text-align: left;
+  font-weight: 600;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  background: #fafafa;
+}
+
+.users tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 0;
+  background: #8b5cf6;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.05);
+}
+
+button.danger {
+  background: #ef4444;
+}
+
+.error {
+  color: #b91c1c;
+  margin-bottom: 12px;
+}

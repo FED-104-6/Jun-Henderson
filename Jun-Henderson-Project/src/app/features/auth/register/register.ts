@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { Auth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from '@angular/fire/auth';
 import { RouterLink } from '@angular/router';
+import { Firestore, doc, setDoc, serverTimestamp } from '@angular/fire/firestore';
+import { AppUser } from '../../../models/user.entity';
 
 function match(otherControlName: string) {
   return (control: AbstractControl) => {
@@ -22,13 +24,18 @@ function match(otherControlName: string) {
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private auth = inject(Auth);
+  private db = inject(Firestore);
 
   loading = signal(false);
   fireError = signal<string | null>(null);
   success = signal<string | null>(null);
 
   form = this.fb.group({
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
     displayName: ['', [Validators.required, Validators.minLength(2)]],
+    dob: ['', [Validators.required]],
+    userType: ['tenant', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required, match('password')]],
@@ -53,15 +60,38 @@ export class RegisterComponent {
     this.fireError.set(null);
     this.success.set(null);
 
-    const { displayName, email, password } = this.form.getRawValue();
+    const { firstName, lastName, displayName, dob, userType, email, password } = this.form.getRawValue();
 
     try {
       if (!email || !password) return;
       const cred = await createUserWithEmailAndPassword(this.auth, String(email).trim(), String(password));
       if (displayName) await updateProfile(cred.user, { displayName: String(displayName).trim() });
       try { await sendEmailVerification(cred.user); } catch {}
+
+      const now = Date.now();
+      const userDoc: AppUser = {
+        id: cred.user.uid,
+        firstName: String(firstName ?? '').trim(),
+        lastName: String(lastName ?? '').trim(),
+        email: String(email).trim(),
+        displayName: String(displayName ?? '').trim(),
+        dob: String(dob ?? ''),
+        userType: String(userType ?? 'tenant') as any,
+        flatsCount: 0,
+        isAdmin: false,
+        photoURL: cred.user.photoURL ?? null,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      await setDoc(doc(this.db, 'users', cred.user.uid), {
+        ...userDoc,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+
       this.success.set('Account created! Please check your email to verify.');
-      this.form.reset({ acceptTerms: false });
+      this.form.reset({ userType: 'tenant', acceptTerms: false });
     } catch (e: any) {
       const code = e?.code ?? 'unknown';
       const message = e?.message ?? '';
