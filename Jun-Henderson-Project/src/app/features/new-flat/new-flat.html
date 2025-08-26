@@ -1,0 +1,81 @@
+<h1>New Flat</h1>
+
+<form class="new-flat-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="form-grid">
+    <!-- City -->
+    <label>
+      <span>City</span>
+      <input type="text" formControlName="city" placeholder="Vancouver" required />
+      <em *ngIf="f.city.touched && f.city.invalid">Required (min 2 chars)</em>
+    </label>
+
+    <!-- Street Name -->
+    <label>
+      <span>Street Name</span>
+      <input type="text" formControlName="streetName" placeholder="Granville St" required />
+      <em *ngIf="f.streetName.touched && f.streetName.invalid">Required (min 2 chars)</em>
+    </label>
+
+    <!-- Street Number -->
+    <label>
+      <span>Street Number</span>
+      <input type="number" formControlName="streetNumber" min="1" step="1" placeholder="1234" required />
+      <em *ngIf="f.streetNumber.touched && f.streetNumber.invalid">Positive number</em>
+    </label>
+
+    <!-- Area Size -->
+    <label>
+      <span>Area Size (m²)</span>
+      <input type="number" formControlName="areaSize" min="1" step="1" placeholder="55" required />
+      <em *ngIf="f.areaSize.touched && f.areaSize.invalid">Positive number</em>
+    </label>
+
+    <!-- Has AC -->
+    <label class="field-checkbox">
+      <input type="checkbox" formControlName="hasAC" />
+      <span>Has AC</span>
+    </label>
+
+    <!-- Year Built -->
+    <label>
+      <span>Year Built</span>
+      <input
+        type="number"
+        formControlName="yearBuilt"
+        min="1800"
+        [max]="currentYear"
+        step="1"
+        placeholder="2025"
+        required
+      />
+      <em *ngIf="f.yearBuilt.touched && f.yearBuilt.invalid">
+        Between 1800 and {{currentYear}}
+      </em>
+    </label>
+
+    <!-- Rent Price -->
+    <label>
+      <span>Rent Price (CAD)</span>
+      <input type="number" formControlName="rentPrice" min="1" step="1" placeholder="2200" required />
+      <em *ngIf="f.rentPrice.touched && f.rentPrice.invalid">Positive number</em>
+    </label>
+
+    <!-- Date Available -->
+    <label>
+      <span>Date Available</span>
+      <input type="date" formControlName="dateAvailable" [min]="today" required />
+      <em *ngIf="f.dateAvailable.touched && f.dateAvailable.invalid">Required</em>
+    </label>
+  </div>
+
+  <div class="actions">
+    <a routerLink="/home" class="btn ghost">Cancel</a>
+    <button 
+    type="submit" 
+    class="btn save" 
+    [disabled]="form.invalid"
+    [class.is-enabled]="form.valid"
+    [class.is-disabled]="!form.valid">Save   
+    </button>
+  </div>
+</form>
