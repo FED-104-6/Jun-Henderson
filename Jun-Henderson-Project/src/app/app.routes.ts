@@ -9,6 +9,7 @@ import { NewFlatComponent } from './features/new-flat/new-flat';
 import { ViewFlatComponent } from './features/view-flat/view-flat';
 import { EditFlatComponent } from './features/edit-flat/edit-flat';
 import { MyFlatsComponent } from './features/my-flats/my-flats';
+import { FavoritesComponent } from './features/favourites/favorites';
 
 export const routes: Routes = [
   // public
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'flat/:id/edit', component: EditFlatComponent, canActivate: [authGuard] },   // PROTECTED
   { path: 'my-flats', component: MyFlatsComponent, canActivate: [authGuard] },         // PROTECTED
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'favorites', component: FavoritesComponent, canActivate: [authGuard] },
 
   // temporary until real Home exists
   { path: 'home', redirectTo: '', pathMatch: 'full' },

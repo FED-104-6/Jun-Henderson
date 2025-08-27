@@ -1,0 +1,50 @@
+<div class="fav-wrap">
+  <header class="fav-head">
+    <div>
+      <h1>Favourites</h1>
+      <p class="muted">{{ count() }} item(s)</p>
+    </div>
+    <!-- Home virá em seguida, já deixamos o link -->
+    <a routerLink="/home" class="btn primary">Go to Home</a>
+  </header>
+
+  <section *ngIf="data().length; else empty" class="cards">
+    <article class="flat-card" *ngFor="let f of data(); trackBy: trackById">
+      <div class="flat-image" [style.background-image]="'url(' + imageOf(f) + ')'"></div>
+
+      <div class="flat-details">
+        <div class="flat-price">\${{ f.rentPrice }}/month</div>
+        <div class="flat-address">{{ f.streetName }} {{ f.streetNumber }}, {{ f.city }}</div>
+
+        <div class="flat-features">
+          <span class="flat-feature" *ngIf="f.bedrooms != null">{{ f.bedrooms }} BR</span>
+          <span class="flat-feature" *ngIf="f.bathrooms != null">{{ f.bathrooms }} Bath</span>
+          <span class="flat-feature">{{ f.areaSize }} m²</span>
+        </div>
+
+        <div class="flat-actions">
+          <button class="view-btn" (click)="viewDetails(f.id)">View Details</button>
+
+          <!-- Heart icon (hover-only animation), per your snippet -->
+          <img
+            class="favorite-icon"
+            [title]="isFav(f.id) ? 'Remove from Favorites' : 'Add to Favorites'"
+            src="https://cdn-icons-png.flaticon.com/512/803/803087.png"
+            (click)="toggleFav(f.id)"
+            alt="Favorite"
+          />
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <ng-template #empty>
+    <div class="fav-empty">
+      <p class="no-results">You have no favorite flats yet.</p>
+      <div class="actions">
+        <a routerLink="/home" class="btn primary">Find Flats</a>
+        <a routerLink="/new-flat" class="btn ghost">Insert New Flat</a>
+      </div>
+    </div>
+  </ng-template>
+</div>
