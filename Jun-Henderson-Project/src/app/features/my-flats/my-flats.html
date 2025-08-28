@@ -1,0 +1,42 @@
+<div class="mf-wrap">
+  <header class="mf-head">
+    <div>
+      <h1>{{ title() }}</h1>
+      <p class="muted">{{ countLabel() }}</p>
+    </div>
+    <a routerLink="/new-flat" class="btn primary">New Flat</a>
+  </header>
+
+  <section *ngIf="flats().length; else empty" class="mf-grid">
+    <article class="card" *ngFor="let f of flats()">
+      <header class="card-head">
+        <h2 class="card-title">
+          {{ f.city }} — {{ f.streetName }} {{ f.streetNumber }}
+        </h2>
+        <div class="price">{{ priceLabel(f.rentPrice) }}</div>
+      </header>
+
+      <ul class="specs">
+        <li><strong>Area:</strong> {{ f.areaSize }} m²</li>
+        <li><strong>AC:</strong> {{ f.hasAC ? 'Yes' : 'No' }}</li>
+        <li><strong>Year:</strong> {{ f.yearBuilt }}</li>
+        <li><strong>Available:</strong> {{ f.dateAvailable }}</li>
+      </ul>
+
+      <footer class="card-actions">
+        <button class="btn ghost" (click)="goView(f.id)">View</button>
+        <button class="btn ghost" (click)="goEdit(f.id)">Edit</button>
+        <button class="btn danger" (click)="onDelete(f.id!)">Delete</button>
+      </footer>
+    </article>
+  </section>
+
+  <ng-template #empty>
+    <div class="mf-empty">
+      <p>No flats found.</p>
+      <div class="actions">
+        <a routerLink="/new-flat" class="btn primary">Create one</a>
+      </div>
+    </div>
+  </ng-template>
+</div>
