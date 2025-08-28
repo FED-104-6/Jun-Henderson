@@ -1,0 +1,30 @@
+<div *ngIf="flat() as f; else notFound" class="vf-wrap">
+  <header class="vf-head">
+    <a routerLink="/" class="link">← Home</a>
+    <h1>{{ title() }}</h1>
+  </header>
+
+  <section class="vf-grid">
+    <div class="vf-row"><strong>City</strong><span>{{ f.city }}</span></div>
+    <div class="vf-row"><strong>Street</strong><span>{{ f.streetName }} {{ f.streetNumber }}</span></div>
+    <div class="vf-row"><strong>Area Size</strong><span>{{ f.areaSize }} m²</span></div>
+    <div class="vf-row"><strong>Air Conditioning</strong><span>{{ acLabel() }}</span></div>
+    <div class="vf-row"><strong>Year Built</strong><span>{{ f.yearBuilt }}</span></div>
+    <div class="vf-row"><strong>Rent Price</strong><span>{{ priceLabel() }}</span></div>
+    <div class="vf-row"><strong>Available From</strong><span>{{ f.dateAvailable }}</span></div>
+  </section>
+
+  <footer class="vf-actions">
+    <a routerLink="/" class="btn">Back</a>
+  </footer>
+</div>
+
+<ng-template #notFound>
+  <div class="vf-empty">
+    <p>Flat não encontrado ou ainda não foi criado.</p>
+    <div class="vf-actions">
+      <a routerLink="/" class="btn ghost">Home</a>
+      <a routerLink="/new-flat" class="btn">Create New</a>
+    </div>
+  </div>
+</ng-template>

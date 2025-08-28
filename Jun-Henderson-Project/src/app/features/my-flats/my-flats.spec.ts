@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewFlatComponent } from './new-flat';
+import { MyFlatsComponent } from './my-flats';
 
-describe('NewFlat', () => {
-  let component: NewFlatComponent;
-  let fixture: ComponentFixture<NewFlatComponent>;
+describe('MyFlats', () => {
+  let component: MyFlatsComponent;
+  let fixture: ComponentFixture<MyFlatsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NewFlatComponent]
+      imports: [MyFlatsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(NewFlatComponent);
+    fixture = TestBed.createComponent(MyFlatsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

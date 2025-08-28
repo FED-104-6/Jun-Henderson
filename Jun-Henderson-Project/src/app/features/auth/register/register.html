@@ -3,9 +3,37 @@
 
   <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
     <div class="field">
-      <label for="displayName">Name</label>
-      <input id="displayName" type="text" formControlName="displayName" placeholder="Your name" />
+      <label for="firstName">First name</label>
+      <input id="firstName" type="text" formControlName="firstName" placeholder="John" />
+      <small *ngIf="f.firstName.touched && f.firstName.invalid">Min 2 characters.</small>
+    </div>
+
+    <div class="field">
+      <label for="lastName">Last name</label>
+      <input id="lastName" type="text" formControlName="lastName" placeholder="Doe" />
+      <small *ngIf="f.lastName.touched && f.lastName.invalid">Min 2 characters.</small>
+    </div>
+
+    <div class="field">
+      <label for="displayName">Display name</label>
+      <input id="displayName" type="text" formControlName="displayName" placeholder="John D." />
       <small *ngIf="f.displayName.touched && f.displayName.invalid">Min 2 characters.</small>
+    </div>
+
+    <div class="field">
+      <label for="dob">Date of birth</label>
+      <input id="dob" type="date" formControlName="dob" />
+      <small *ngIf="f.dob.touched && f.dob.invalid">Required.</small>
+    </div>
+
+    <div class="field">
+      <label for="userType">User type</label>
+      <select id="userType" formControlName="userType">
+        <option value="tenant">Tenant</option>
+        <option value="landlord">Landlord</option>
+        <option value="other">Other</option>
+      </select>
+      <small *ngIf="f.userType.touched && f.userType.invalid">Required.</small>
     </div>
 
     <div class="field">
@@ -38,7 +66,8 @@
     </button>
 
     <p class="redirect">
-      Already have an account? <a routerLink="/login">Login</a>
+      Already have an account?
+      <a [routerLink]="['/login']" class="router-link">Login</a>
     </p>
 
     <p class="error" *ngIf="fireError()">{{ fireError() }}</p>
