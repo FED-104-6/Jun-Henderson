@@ -13,6 +13,7 @@ import { NewFlatComponent } from './features/new-flat/new-flat';
 import { ViewFlatComponent } from './features/view-flat/view-flat';
 import { EditFlatComponent } from './features/edit-flat/edit-flat';
 import { MyFlatsComponent } from './features/my-flats/my-flats';
+import { FavoritesComponent } from './features/favourites/favorites';
 
 export const routes: Routes = [
   // public
@@ -28,6 +29,7 @@ export const routes: Routes = [
 
   // profile
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'favorites', component: FavoritesComponent, canActivate: [authGuard] },
 
   // admin
   { path: 'admin/users', component: AllUsersComponent, canActivate: [authGuard, adminGuard] },
