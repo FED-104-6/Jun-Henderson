@@ -1,5 +1,4 @@
-// Minimal Flat model used by View Flat.
-// Keep this in sync with the New Flat form.
+// Keep this interface name and export as-is.
 export interface Flat {
   city: string;
   streetName: string;
@@ -8,8 +7,11 @@ export interface Flat {
   hasAC: boolean;
   yearBuilt: number;
   rentPrice: number;
-  dateAvailable: string; // ISO "YYYY-MM-DD"
+  dateAvailable: string; // "YYYY-MM-DD"
 
-  id?: string;   // will be defined when the item is created
+  id?: string;
   ownerId?: string;
+
+  image?: string;        // DataURL or URL shown in cards
+  favorites?: string[];  // list of user emails who favorited this flat
 }
