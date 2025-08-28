@@ -9,24 +9,45 @@ const STORAGE_KEY = 'flats';
 export class NewFlatService {
   private auth = inject(Auth);
 
-  createFlat(flat: Flat): Observable<Flat> {
-    // generate an id and attach current user as owner (if logged in)
-    const id = globalThis.crypto?.randomUUID?.() ?? String(Date.now());
-    const ownerId = this.auth.currentUser?.uid ?? undefined;
-
-    // normalize and build the record
-    const record: Flat = { ...flat, id, ownerId };
-
+  /** Load all flats from localStorage */
+  private load(): Flat[] {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      const list: Flat[] = raw ? JSON.parse(raw) : [];
-      list.push(record);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch {
+      return [];
+    }
+  }
+
+  /** Save all flats back to localStorage */
+  private save(list: Flat[]): void {
+    try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
     } catch (e) {
       console.error('[NewFlatService] Failed to persist to localStorage:', e);
     }
+  }
+
+  /** Create a new flat and persist it */
+  createFlat(flat: Flat): Observable<Flat> {
+    // Generate id and attach ownerId from the logged-in user
+    const id = globalThis.crypto?.randomUUID?.() ?? String(Date.now());
+    const ownerId = this.auth.currentUser?.uid ?? undefined;
+
+    // normalize and build the record
+    const record: Flat = {
+      ...flat,
+      id,
+      ownerId,
+      favorites: flat.favorites ?? [],
+    };
+
+    const list = this.load();
+    list.push(record);
+    this.save(list);
 
     // mimic async API
-    return of(record).pipe(delay(500));
+    return of(record).pipe(delay(400));
   }
 }
