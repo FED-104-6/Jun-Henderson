@@ -4,11 +4,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { ViewFlatService } from './view-flat.service';
 import { Flat } from './view-flat.model';
+import { FlatMessagesComponent } from "../flat-messages/flat-messages";
 
 @Component({
   standalone: true,
   selector: 'app-view-flat',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FlatMessagesComponent],
   templateUrl: './view-flat.html',
   styleUrls: ['./view-flat.css'],
 })

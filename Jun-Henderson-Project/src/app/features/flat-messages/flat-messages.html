@@ -1,0 +1,36 @@
+<div class="msg-wrap" *ngIf="!loading(); else loadingTpl">
+  <h2>Messages</h2>
+
+  <div *ngIf="!userId()" class="signin-hint">
+    <p>Please <a routerLink="/login">login</a> to view or send messages.</p>
+  </div>
+
+  <div *ngIf="userId()">
+    <div class="composer" *ngIf="!isOwner(); else ownerView">
+      <form [formGroup]="form" (ngSubmit)="send()" novalidate>
+        <textarea rows="3" placeholder="Write a message to the owner..." formControlName="content"></textarea>
+        <button type="submit" [disabled]="form.invalid || sending()">{{ sending() ? 'Sending...' : 'Send message' }}</button>
+      </form>
+    </div>
+
+    <ng-template #ownerView>
+      <p class="owner-note">You are the owner of this flat. Incoming messages are listed below.</p>
+    </ng-template>
+
+    <div class="list">
+      <div class="item" *ngFor="let m of messages$ | async">
+        <div class="item-header">
+          <span class="from">{{ m.senderName }} • {{ m.senderEmail }}</span>
+          <span class="date">{{ m.createdAt?.toDate ? (m.createdAt.toDate() | date:'yyyy-MM-dd HH:mm') : '' }}</span>
+        </div>
+        <div class="content">{{ m.content }}</div>
+      </div>
+    </div>
+
+    <p class="empty" *ngIf="(messages$ | async)?.length === 0">No messages.</p>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <p>Loading messages...</p>
+</ng-template>
