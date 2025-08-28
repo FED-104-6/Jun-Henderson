@@ -1,0 +1,71 @@
+<div class="users-page">
+  <h1>All Users</h1>
+
+  <form [formGroup]="filters" class="filters">
+    <input type="text" placeholder="Search name or email" formControlName="search" />
+    <select formControlName="userType">
+      <option value="">User type</option>
+      <option value="tenant">Tenant</option>
+      <option value="landlord">Landlord</option>
+      <option value="other">Other</option>
+    </select>
+    <input type="number" placeholder="Age min" formControlName="ageMin" />
+    <input type="number" placeholder="Age max" formControlName="ageMax" />
+    <input type="number" placeholder="Flats min" formControlName="flatsMin" />
+    <input type="number" placeholder="Flats max" formControlName="flatsMax" />
+    <select formControlName="isAdmin">
+      <option value="">Is admin?</option>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+    <select formControlName="sortBy">
+      <option value="firstName">First name</option>
+      <option value="lastName">Last name</option>
+      <option value="flatsCount">Flats counter</option>
+    </select>
+    <select formControlName="sortDir">
+      <option value="asc">Asc</option>
+      <option value="desc">Desc</option>
+    </select>
+  </form>
+
+  <p class="error" *ngIf="error()">{{ error() }}</p>
+
+  <div class="table-wrap" *ngIf="!loading(); else loadingTpl">
+    <table class="users">
+      <thead>
+        <tr>
+          <th>First</th>
+          <th>Last</th>
+          <th>Email</th>
+          <th>User type</th>
+          <th>Age</th>
+          <th>Flats</th>
+          <th>Admin</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of filtered()">
+          <td>{{ u.firstName }}</td>
+          <td>{{ u.lastName }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.userType }}</td>
+          <td>{{ u.dob | date:'yyyy-MM-dd' }}</td>
+          <td>{{ u.flatsCount }}</td>
+          <td>{{ u.isAdmin ? 'Yes' : 'No' }}</td>
+          <td class="actions">
+            <button [routerLink]="['/admin/users', u.id]">Open profile</button>
+            <button (click)="setAdmin(u, !u.isAdmin)">{{ u.isAdmin ? 'Revoke admin' : 'Make admin' }}</button>
+            <button class="danger" (click)="remove(u)">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="filtered().length === 0">No users found.</p>
+  </div>
+
+  <ng-template #loadingTpl>
+    <p>Loading users...</p>
+  </ng-template>
+</div>
