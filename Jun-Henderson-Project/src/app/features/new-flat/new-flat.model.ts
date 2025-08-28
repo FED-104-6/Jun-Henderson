@@ -6,11 +6,13 @@ export interface Flat {
   hasAC: boolean;
   yearBuilt: number;
   rentPrice: number;
-  dateAvailable: string; // ISO date "YYYY-MM-DD"
+  dateAvailable: string;
 
-  id?: string;          // generated on save
-  ownerId?: string;     // logged-in user uid
+  id?: string;
+  ownerId?: string;
+  createdAt?: number;
+  updatedAt?: number;
 
-  image?: string;       // dataURL or URL
-  favorites?: string[]; // list of user emails who favourited this flat
+  image?: string;
+  favorites?: string[];
 }
