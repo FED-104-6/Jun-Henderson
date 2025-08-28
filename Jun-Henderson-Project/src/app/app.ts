@@ -13,15 +13,15 @@ import { Auth } from '@angular/fire/auth';
 export class App {
   private auth = inject(Auth);
 
-  // Greeting and admin flag (wire real isAdmin from Dev B later)
+  // Greeting shown on the navbar (displayName -> email -> "User")
   readonly userName = signal<string>('User');
-  readonly isAdmin  = signal<boolean>(false);
+
+  // When you wire an admin flag later, flip this to a real value
+  readonly isAdmin = signal<boolean>(false);
 
   constructor() {
     const u = this.auth.currentUser;
     const name = u?.displayName || u?.email || 'User';
     this.userName.set(name);
-
-    this.isAdmin.set(false);
   }
 }

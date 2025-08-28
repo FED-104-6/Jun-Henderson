@@ -4,7 +4,6 @@
       <h1>Favourites</h1>
       <p class="muted">{{ count() }} item(s)</p>
     </div>
-    <!-- Home virá em seguida, já deixamos o link -->
     <a routerLink="/home" class="btn primary">Go to Home</a>
   </header>
 
@@ -17,15 +16,13 @@
         <div class="flat-address">{{ f.streetName }} {{ f.streetNumber }}, {{ f.city }}</div>
 
         <div class="flat-features">
-          <span class="flat-feature" *ngIf="f.bedrooms != null">{{ f.bedrooms }} BR</span>
-          <span class="flat-feature" *ngIf="f.bathrooms != null">{{ f.bathrooms }} Bath</span>
+          <span class="flat-feature" *ngIf="$any(f).bedrooms != null">{{ $any(f).bedrooms }} BR</span>
+          <span class="flat-feature" *ngIf="$any(f).bathrooms != null">{{ $any(f).bathrooms }} Bath</span>
           <span class="flat-feature">{{ f.areaSize }} m²</span>
         </div>
 
         <div class="flat-actions">
           <button class="view-btn" (click)="viewDetails(f.id)">View Details</button>
-
-          <!-- Heart icon (hover-only animation), per your snippet -->
           <img
             class="favorite-icon"
             [title]="isFav(f.id) ? 'Remove from Favorites' : 'Add to Favorites'"

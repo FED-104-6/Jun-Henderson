@@ -1,1 +1,21 @@
-<router-outlet></router-outlet>
+<nav class="hf-nav hf-solid">
+  <div class="hf-nav-inner">
+    <a routerLink="/home" class="hf-brand">
+      <!-- Replace with <img class="hf-brand-logo" src="assets/logo.png" alt="FlatFinder"> when you have a logo -->
+      <span class="hf-brand-text">FlatFinder</span>
+    </a>
+
+    <ul class="hf-links">
+      <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
+      <li><a routerLink="/my-flats" routerLinkActive="active">My Flats</a></li>
+      <li><a routerLink="/favorites" routerLinkActive="active">Favourites</a></li>
+      <li><a routerLink="/new-flat" routerLinkActive="active">New Flat</a></li>
+      <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
+      <li *ngIf="isAdmin()"><a routerLink="/all-users" routerLinkActive="active">All Users</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="page">
+  <router-outlet></router-outlet>
+</main>

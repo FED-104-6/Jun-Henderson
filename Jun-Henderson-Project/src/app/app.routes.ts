@@ -15,8 +15,8 @@ import { HomeComponent } from './features/home/home';
 
 export const routes: Routes = [
   // public
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },  
+  { path: '', redirectTo: 'home', pathMatch: 'full' },  
+  { path: 'home', component: HomeComponent },   
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
 
