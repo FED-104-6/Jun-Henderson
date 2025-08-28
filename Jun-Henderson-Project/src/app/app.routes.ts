@@ -11,9 +11,12 @@ import { EditFlatComponent } from './features/edit-flat/edit-flat';
 import { MyFlatsComponent } from './features/my-flats/my-flats';
 import { FavoritesComponent } from './features/favourites/favorites';
 
+import { HomeComponent } from './features/home/home';
+
 export const routes: Routes = [
   // public
-  { path: '', component: RegisterComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },  
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
 
@@ -25,8 +28,6 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'favorites', component: FavoritesComponent, canActivate: [authGuard] },
 
-  // temporary until real Home exists
-  { path: 'home', redirectTo: '', pathMatch: 'full' },
-
-  { path: '**', redirectTo: '' },
+  // fallback
+  { path: '**', redirectTo: 'home' },
 ];
