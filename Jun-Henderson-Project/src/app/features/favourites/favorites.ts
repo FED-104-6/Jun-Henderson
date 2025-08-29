@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 
 import { FavoritesService } from './favorites.service';
-import { ViewFlatService } from '../view-flat/view-flat.service';
 import type { Flat } from '../view-flat/view-flat.model';
 
 @Component({
@@ -15,11 +14,10 @@ import type { Flat } from '../view-flat/view-flat.model';
 })
 export class FavoritesComponent {
   private favs = inject(FavoritesService);
-  private view = inject(ViewFlatService);
   private router = inject(Router);
 
-  // Load just the favorites (email-based)
-  private readonly data = signal<Flat[]>(this.favs.listFavorites());
+  // ⬇️ make it public so the template can access data()
+  readonly data = signal<Flat[]>(this.favs.listFavorites());
   readonly count = computed(() => this.data().length);
 
   refresh(): void {
@@ -27,7 +25,6 @@ export class FavoritesComponent {
   }
 
   imageOf(f: Flat): string {
-    // Fallback to a placeholder if you don't have images yet
     return f.image || 'https://via.placeholder.com/480x320?text=Flat';
   }
 

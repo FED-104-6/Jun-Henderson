@@ -1,0 +1,146 @@
+<p class="welcome">Welcome — {{ displayName() }}</p>
+
+<h1 class="page-title">Search Flats</h1>
+
+<!-- Filters  -->
+<form class="filters" [formGroup]="form" (ngSubmit)="applyFilters()">
+  <div class="row">
+    <label>
+      <span>City</span>
+      <select formControlName="city">
+        <option value="">Any</option>
+        <option *ngFor="let c of cityOptions()" [value]="c">{{ c }}</option>
+      </select>
+    </label>
+
+    <label>
+      <span>Price Min</span>
+      <input type="number" formControlName="priceMin" min="0" step="1" />
+    </label>
+
+    <label>
+      <span>Price Max</span>
+      <input type="number" formControlName="priceMax" min="0" step="1" />
+    </label>
+
+    <label>
+      <span>Area Min (m²)</span>
+      <input type="number" formControlName="areaMin" min="0" step="1" />
+    </label>
+
+    <label>
+      <span>Area Max (m²)</span>
+      <input type="number" formControlName="areaMax" min="0" step="1" />
+    </label>
+
+    <label>
+      <span>Sort By</span>
+      <select formControlName="sortBy">
+        <option value="city">City</option>
+        <option value="rentPrice">Price</option>
+        <option value="areaSize">Area</option>
+      </select>
+    </label>
+  </div>
+
+  <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+    <button type="submit" class="btn primary">Search</button>
+  </div>
+</form>
+
+<!-- New feature: Featured Flats -->
+<section class="hero" id="hero-featured" *ngIf="filteredFeatured().length">
+  <h2 class="hero-title">Featured</h2>
+
+  <div class="hero-cards">
+    <article class="hero-card" *ngFor="let f of filteredFeatured(); trackBy: trackById">
+      <div class="hero-img" [style.background-image]="'url(' + heroImageOf(f) + ')'"></div>
+
+      <div class="hero-body">
+        <div class="hero-top">
+          <div class="hero-price">\${{ f.rentPrice }} / month</div>
+
+          <button
+            type="button"
+            class="fav-btn hero-fav"
+            [class.filled]="isFav(f.id)"
+            (click)="toggleFav(f.id)"
+            aria-label="Toggle favorite"
+            [title]="isFav(f.id) ? 'Remove from Favorites' : 'Add to Favorites'"
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path
+                d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.57 3.07 6.46 7.75 10.54L12 21l2.25-1.96C18.93 14.96 22 12.07 22 8.5 22 5.42 19.58 3 16.5 3z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="hero-addr">{{ f.streetName }} {{ f.streetNumber }}, {{ f.city }}</div>
+        <div class="hero-subtitle">{{ f.subtitle }}</div>
+
+        <div class="hero-features">
+          <span class="hero-chip">{{ f.areaSize }} m²</span>
+          <span class="hero-chip" *ngIf="f.hasAC">AC</span>
+          <span class="hero-chip">Built {{ f.yearBuilt }}</span>
+          <span class="hero-chip">Avail {{ f.dateAvailable }}</span>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn ghost" (click)="viewFlat(f.id)">View</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- All Flats (filtered) -->
+<section class="cards" *ngIf="rows().length; else empty">
+  <article class="card" *ngFor="let f of rows(); trackBy: trackById">
+    <div class="img" [style.background-image]="'url(' + imageOf(f) + ')'"></div>
+
+    <div class="body">
+      <div class="top">
+        <div class="price">\${{ f.rentPrice }} / month</div>
+        <button
+          type="button"
+          class="fav-btn"
+          [class.filled]="isFav(f.id)"
+          (click)="toggleFav(f.id)"
+          aria-label="Toggle favorite"
+          [title]="isFav(f.id) ? 'Remove from Favorites' : 'Add to Favorites'"
+        >
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <path
+              d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.57 3.07 6.46 7.75 10.54L12 21l2.25-1.96C18.93 14.96 22 12.07 22 8.5 22 5.42 19.58 3 16.5 3z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="addr">{{ f.streetName }} {{ f.streetNumber }}, {{ f.city }}</div>
+
+      <div class="features">
+        <span class="chip">{{ f.areaSize }} m²</span>
+        <span class="chip" *ngIf="f.hasAC">AC</span>
+        <span class="chip">Built {{ f.yearBuilt }}</span>
+        <span class="chip">Avail {{ f.dateAvailable }}</span>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" (click)="viewFlat(f.id)">View</button>
+      </div>
+    </div>
+  </article>
+</section>
+
+<ng-template #empty>
+  <div class="empty">
+    <p>No flats found with current filters.</p>
+    <a routerLink="/new-flat" class="btn primary">Insert New Flat</a>
+  </div>
+</ng-template>
