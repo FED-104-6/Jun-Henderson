@@ -1,10 +1,11 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Auth } from '@angular/fire/auth';
 
 import { ViewFlatService } from './view-flat.service';
-import { Flat } from './view-flat.model';
-import { FlatMessagesComponent } from "../flat-messages/flat-messages";
+import type { Flat } from './view-flat.model';
+import { FlatMessagesComponent } from '../flat-messages/flat-messages'; // keep from main
 
 @Component({
   standalone: true,
@@ -14,40 +15,49 @@ import { FlatMessagesComponent } from "../flat-messages/flat-messages";
   styleUrls: ['./view-flat.css'],
 })
 export class ViewFlatComponent {
+  // Services
+  public store = inject(ViewFlatService);   // public so template can call if needed
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private auth = inject(Auth);
 
-  // Explicitly type the injected service so TS doesn't treat it as unknown.
-  private store: ViewFlatService = inject(ViewFlatService); // ✔ typed
+  // Current id from route
+  readonly id = computed<string | null>(() => this.route.snapshot.paramMap.get('id'));
 
-  // Read id from "/flats/:id"
-  readonly id = this.route.snapshot.paramMap.get('id') ?? '';
+  // Return the flat or undefined (not null) to satisfy the template typing
+  flat(): Flat | undefined {
+    const fid = this.id();
+    if (!fid) return undefined;
+    // If your service returns Flat | null, coerce null to undefined
+    return this.store.get(fid) ?? undefined;
+  }
 
-  // Load once from localStorage
-  readonly flat = signal<Flat | null>(this.store.get(this.id)); // ✔ known type now
+  // Normalize image path so local and remote values render safely
+  private normalizeImagePath(img?: string | null): string {
+    const fallback = '/assets/flats/hero-1.jpg';
+    if (!img) return fallback;
+    if (/^https?:\/\//i.test(img)) return img;        // http(s) URL
+    if (img.startsWith('/assets/')) return img;       // absolute app asset
+    if (img.startsWith('assets/')) return '/' + img;  // relative app asset
+    return '/assets/flats/' + img.replace(/^\/+/, ''); // filename
+  }
 
-  // Simple derived labels for UI
-  readonly title = computed(() => {
-    const f = this.flat();
-    if (!f) return 'Flat Details';
-    const left = [f.city, f.streetName].filter(Boolean).join(' — ');
-    const right = f.streetNumber ? String(f.streetNumber) : '';
-    return [left, right].filter(Boolean).join(' ');
-  });
+  imageOf(f: Flat | null | undefined): string {
+    return this.normalizeImagePath(f?.image ?? null);
+  }
 
-  readonly acLabel = computed(() => {
-    const f = this.flat();
-    if (!f) return '';
-    return f.hasAC ? 'Has AC' : 'No AC';
-  });
+  // Owner check
+  isOwner(f: Flat | undefined): boolean {
+    const uid = this.auth.currentUser?.uid;
+    return !!f?.ownerId && !!uid && f.ownerId === uid;
+  }
 
-  readonly priceLabel = computed(() => {
-    const f = this.flat();
-    if (!f) return '';
-    try {
-      return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'CAD' })
-        .format(f.rentPrice || 0);
-    } catch {
-      return `CAD ${f.rentPrice ?? 0}`;
-    }
-  });
+  // Navigation
+  goEdit(id?: string | null): void {
+    if (!id) return;
+    this.router.navigate(['/flat', id, 'edit']);
+  }
+  goHome(): void {
+    this.router.navigate(['/home']);
+  }
 }

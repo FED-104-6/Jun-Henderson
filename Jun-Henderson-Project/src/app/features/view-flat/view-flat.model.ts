@@ -1,5 +1,8 @@
 // Keep this interface name and export as-is.
 export interface Flat {
+  id?: string;
+  ownerId?: string;
+
   city: string;
   streetName: string;
   streetNumber: number;
@@ -9,9 +12,7 @@ export interface Flat {
   rentPrice: number;
   dateAvailable: string; // "YYYY-MM-DD"
 
-  id?: string;
-  ownerId?: string;
-
-  image?: string;        // DataURL or URL shown in cards
-  favorites?: string[];  // list of user emails who favorited this flat
+  // Optional visual & UX fields
+  image?: string | null;   // DataURL/URL or app asset path; may be null in legacy data
+  favorites?: string[];    // user emails/ids who favorited this flat
 }
