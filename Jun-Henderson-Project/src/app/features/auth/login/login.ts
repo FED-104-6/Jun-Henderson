@@ -1,23 +1,30 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { Auth, signInWithEmailAndPassword, sendPasswordResetEmail } from '@angular/fire/auth';
-import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
   standalone: true,
+  selector: 'app-login',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
+success(): any {
+throw new Error('Method not implemented.');
+}
+fireError(): any {
+throw new Error('Method not implemented.');
+}
+  private fb = inject(NonNullableFormBuilder);
   private auth = inject(Auth);
+  private router = inject(Router);
 
-  loading = signal(false);
-  fireError = signal<string | null>(null);
-  success = signal<string | null>(null);
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
+  readonly info = signal<string | null>(null);
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -26,58 +33,35 @@ export class LoginComponent {
 
   get f() { return this.form.controls; }
 
-  readonly errorMap: Record<string, string> = {
-    'auth/invalid-credential': 'Invalid email or password.',
-    'auth/invalid-email': 'Invalid email address.',
-    'auth/user-disabled': 'This account is disabled.',
-    'auth/user-not-found': 'User not found.',
-    'auth/wrong-password': 'Wrong password.',
-    'auth/network-request-failed': 'Network request failed. Check your connection.',
-    'auth/too-many-requests': 'Too many attempts. Please try again later.',
-  };
-
   async submit() {
     if (this.form.invalid || this.loading()) return;
     this.loading.set(true);
-    this.fireError.set(null);
-    this.success.set(null);
-
-    const { email, password } = this.form.getRawValue();
-
+    this.error.set(null);
+    this.info.set(null);
     try {
-      if (!email || !password) return;
-      await signInWithEmailAndPassword(this.auth, email.trim(), password);
-      this.success.set('Logged in successfully.');
-      this.form.reset();
+      const { email, password } = this.form.getRawValue();
+      await signInWithEmailAndPassword(this.auth, email!, password!);
+      await this.router.navigateByUrl('/home');
     } catch (e: any) {
-      const code = e?.code ?? 'unknown';
-      const message = e?.message ?? '';
-      const mapped = this.errorMap[code];
-      this.fireError.set(mapped ? mapped : `${code} ${message}`.trim());
-      console.error('Firebase login error:', e);
+      this.error.set(e?.message ?? 'Failed to sign in.');
     } finally {
       this.loading.set(false);
     }
   }
 
   async resetPassword() {
-    if (this.loading()) return;
-    this.fireError.set(null);
-    this.success.set(null);
-    const email = this.form.controls.email.value;
-    if (!email) {
-      this.fireError.set('Enter your email to reset the password.');
-      return;
-    }
+    const email = this.f.email.value;
+    if (!email) { this.error.set('Enter your email to reset the password.'); return; }
+    this.loading.set(true);
+    this.error.set(null);
+    this.info.set(null);
     try {
-      await sendPasswordResetEmail(this.auth, email.trim());
-      this.success.set('Password reset email sent.');
+      await sendPasswordResetEmail(this.auth, email);
+      this.info.set('Password reset email sent.');
     } catch (e: any) {
-      const code = e?.code ?? 'unknown';
-      const message = e?.message ?? '';
-      const mapped = this.errorMap[code];
-      this.fireError.set(mapped ? mapped : `${code} ${message}`.trim());
-      console.error('Firebase reset error:', e);
+      this.error.set(e?.message ?? 'Could not send reset email.');
+    } finally {
+      this.loading.set(false);
     }
   }
 }

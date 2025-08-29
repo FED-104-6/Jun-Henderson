@@ -13,55 +13,42 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "outputPath": "dist/Jun-Henderson-Project",
+            "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
-            ]
+            ],
+            "inlineStyleLanguage": "css"
           },
           "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            }
+            "production": {},
+            "development": {}
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "buildTarget": "Jun-Henderson-Project:build:development",
+            "host": "127.0.0.1",
+            "port": 4300,
+            "open": true,
+            "hmr": false
+          },
           "configurations": {
             "production": {
-              "buildTarget": "Jun-Henderson-Project:build:production"
+              "buildTarget": "Jun-Henderson-Project:build:production",
+              "hmr": false
             },
             "development": {
-              "buildTarget": "Jun-Henderson-Project:build:development"
+              "buildTarget": "Jun-Henderson-Project:build:development",
+              "hmr": false
             }
           },
           "defaultConfiguration": "development"
@@ -72,16 +59,10 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
