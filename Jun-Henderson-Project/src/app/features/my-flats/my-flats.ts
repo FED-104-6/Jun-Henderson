@@ -16,14 +16,18 @@ export class MyFlatsComponent {
   private store = inject(MyFlatsService);
   private router = inject(Router);
 
-  readonly uid = this.store.userId();               // user must be logged (guard)
-  readonly flats = signal<Flat[]>(this.store.listMine());
+  readonly uid = signal<string | null>(this.store.userId());
+  readonly flats = signal<Flat[]>([]);
 
   readonly title = computed(() => 'My Flats');
   readonly countLabel = computed(() => {
     const n = this.flats().length;
     return n === 1 ? '1 flat' : `${n} flats`;
   });
+
+  constructor() {
+    this.refresh();
+  }
 
   priceLabel(rent: number): string {
     try {
@@ -34,13 +38,14 @@ export class MyFlatsComponent {
   }
 
   refresh(): void {
-    this.flats.set(this.store.listMine());
+    const u = this.uid();
+    const mine = this.store.listMine().filter(f => !!u && f.ownerId === u);
+    this.flats.set(mine);
   }
 
   onDelete(id: string): void {
     const ok = confirm('Delete this flat? This action cannot be undone.');
     if (!ok) return;
-
     const removed = this.store.removeIfOwner(id);
     if (!removed) {
       alert('You can only delete your own flats.');

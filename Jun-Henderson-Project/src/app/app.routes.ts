@@ -5,7 +5,7 @@ import { LoginComponent } from './features/auth/login/login';
 import { ProfileComponent } from './features/profile/profile';
 
 import { authGuard } from './features/guards/auth.guard';
-import { adminGuard } from './features/guards/admin.guard';
+// import { adminGuard } from './features/guards/admin.guard';
 
 import { AllUsersComponent } from './features/auth/all-users/all-users';
 
@@ -37,8 +37,8 @@ export const routes: Routes = [
   { path: 'favorites', component: FavoritesComponent, canActivate: [authGuard] },
 
   // admin
-  { path: 'admin/users', component: AllUsersComponent, canActivate: [authGuard, adminGuard] },
-  { path: 'admin/users/:uid', component: AllUsersComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'admin/users', component: AllUsersComponent, canActivate: [authGuard /*, adminGuard*/] },
+  { path: 'admin/users/:uid', component: AllUsersComponent, canActivate: [authGuard /*, adminGuard*/] },
 
   // fallback
   { path: '**', redirectTo: 'home' },
