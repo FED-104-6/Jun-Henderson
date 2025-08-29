@@ -1,14 +1,14 @@
-import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { authState } from '@angular/fire/auth';
-import { map, take } from 'rxjs/operators';
+import { Router, UrlTree, CanActivateFn } from '@angular/router';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 
-export const authGuard: CanActivateFn = () => {
-  const router = inject(Router);
+export const authGuard: CanActivateFn = async (): Promise<boolean | UrlTree> => {
   const auth = inject(Auth);
-  return authState(auth).pipe(
-    take(1),
-    map(user => user ? true : router.createUrlTree(['/login']))
+  const router = inject(Router);
+
+  const user = auth.currentUser ?? await new Promise<any>(resolve =>
+    onAuthStateChanged(auth, u => resolve(u), () => resolve(null))
   );
+
+  return user ? true : router.parseUrl('/login');
 };

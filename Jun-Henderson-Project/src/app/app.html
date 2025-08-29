@@ -1,16 +1,13 @@
-<nav class="hf-nav hf-solid" *ngIf="!hideNavbar()">
+<nav class="hf-nav" *ngIf="true">
   <div class="hf-nav-inner">
-    <a routerLink="/home" class="hf-brand">
-      <span class="hf-brand-text">FlatFinder</span>
-    </a>
-
+    <a routerLink="/home" class="hf-brand"><span class="hf-brand-text">FlatFinder</span></a>
     <ul class="hf-links">
       <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
       <li><a routerLink="/my-flats" routerLinkActive="active">My Flats</a></li>
       <li><a routerLink="/favorites" routerLinkActive="active">Favourites</a></li>
       <li><a routerLink="/new-flat" routerLinkActive="active">New Flat</a></li>
       <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
-      <li *ngIf="isAdmin()"><a routerLink="/admin/users" routerLinkActive="active">All Users</a></li>
+      <li><a routerLink="/admin/users" routerLinkActive="active">All Users</a></li>
     </ul>
   </div>
 </nav>
