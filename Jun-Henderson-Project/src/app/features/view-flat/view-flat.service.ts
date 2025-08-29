@@ -6,7 +6,6 @@ const STORAGE_KEY = 'flats';
 
 @Injectable({ providedIn: 'root' })
 export class ViewFlatService {
-
   list(): Flat[] {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);

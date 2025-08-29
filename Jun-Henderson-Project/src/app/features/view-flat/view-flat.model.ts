@@ -1,3 +1,4 @@
+// Keep this interface name and export as-is.
 export interface Flat {
   id?: string;
   ownerId?: string;
@@ -9,8 +10,9 @@ export interface Flat {
   hasAC: boolean;
   yearBuilt: number;
   rentPrice: number;
-  dateAvailable: string; // ISO "YYYY-MM-DD"
+  dateAvailable: string; // "YYYY-MM-DD"
 
-  image?: string | null;     // image path or URL
-  favorites?: string[];      // emails/ids who favorited (optional)
+  // Optional visual & UX fields
+  image?: string | null;   // DataURL/URL or app asset path; may be null in legacy data
+  favorites?: string[];    // user emails/ids who favorited this flat
 }

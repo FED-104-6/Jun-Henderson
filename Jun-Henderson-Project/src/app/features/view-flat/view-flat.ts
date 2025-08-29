@@ -5,17 +5,18 @@ import { Auth } from '@angular/fire/auth';
 
 import { ViewFlatService } from './view-flat.service';
 import type { Flat } from './view-flat.model';
+import { FlatMessagesComponent } from '../flat-messages/flat-messages'; // keep from main
 
 @Component({
   standalone: true,
   selector: 'app-view-flat',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FlatMessagesComponent],
   templateUrl: './view-flat.html',
   styleUrls: ['./view-flat.css'],
 })
 export class ViewFlatComponent {
   // Services
-  public store = inject(ViewFlatService);
+  public store = inject(ViewFlatService);   // public so template can call if needed
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private auth = inject(Auth);
@@ -35,10 +36,10 @@ export class ViewFlatComponent {
   private normalizeImagePath(img?: string | null): string {
     const fallback = '/assets/flats/hero-1.jpg';
     if (!img) return fallback;
-    if (/^https?:\/\//i.test(img)) return img;       // http(s) URL
-    if (img.startsWith('/assets/')) return img;      // absolute app asset
-    if (img.startsWith('assets/')) return '/' + img; // relative app asset
-    return '/assets/flats/' + img.replace(/^\/+/, ''); // bare filename
+    if (/^https?:\/\//i.test(img)) return img;        // http(s) URL
+    if (img.startsWith('/assets/')) return img;       // absolute app asset
+    if (img.startsWith('assets/')) return '/' + img;  // relative app asset
+    return '/assets/flats/' + img.replace(/^\/+/, ''); // filename
   }
 
   imageOf(f: Flat | null | undefined): string {
