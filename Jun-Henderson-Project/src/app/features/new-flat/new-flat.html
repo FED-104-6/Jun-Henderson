@@ -49,7 +49,7 @@
         required
       />
       <em *ngIf="f.yearBuilt.touched && f.yearBuilt.invalid">
-        Between 1800 and {{currentYear}}
+        Between 1800 and {{ currentYear }}
       </em>
     </label>
 
@@ -81,9 +81,9 @@
 
   <div class="actions">
     <a routerLink="/home" class="btn ghost">Cancel</a>
-    <button 
-      type="submit" 
-      class="btn save" 
+    <button
+      type="submit"
+      class="btn save"
       [disabled]="form.invalid"
       [class.is-enabled]="form.valid"
       [class.is-disabled]="!form.valid">

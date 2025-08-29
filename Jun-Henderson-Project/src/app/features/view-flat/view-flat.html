@@ -1,7 +1,11 @@
 <ng-container *ngIf="flat() as f; else notFound">
 
-  <!-- Hero image -->
-  <div class="vf-hero" [style.background-image]="'url(' + imageOf(f) + ')'"></div>
+  <div class="vf-hero" *ngIf="f.image; else heroBg">
+    <img [src]="f.image" alt="Flat image" style="width:100%;height:auto;display:block;border-radius:12px;">
+  </div>
+  <ng-template #heroBg>
+    <div class="vf-hero" [style.background-image]="'url(' + imageOf(f) + ')'"></div>
+  </ng-template>
 
   <section class="vf-body">
     <header class="vf-head">
@@ -30,5 +34,4 @@
   </div>
 </ng-template>
 
-<app-flat-messages></app-flat-messages>
-
+<app-flat-messages *ngIf="flat() as f" [flatId]="f.id!" [ownerId]="f.ownerId!"></app-flat-messages>

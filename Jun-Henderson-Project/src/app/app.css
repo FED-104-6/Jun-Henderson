@@ -1,3 +1,7 @@
+html, body, * {
+  font-family: 'Inter', sans-serif;
+}
+
 :root{
   --ink:#1e1e2f;
   --muted:#6b7280;
